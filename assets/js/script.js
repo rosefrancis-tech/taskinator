@@ -189,6 +189,7 @@ var dropZoneDraghandler = function(event) {
   if(taskListEl) {
     event.preventDefault();
   }
+  taskListEl.setAttribute("style", "background: rgba(68, 233, 255, 0.7); border-style: dashed;");
 };
 
 var dropTaskHandler = function(event) {
@@ -211,8 +212,15 @@ var dropTaskHandler = function(event) {
     statusSelectEl.selectedIndex = 2;
   }
   dropZoneEl.appendChild(draggableElement);
+  dropZoneEl.removeAttribute("style");
 };
 
+var dragLeaveHandler = function(event) {
+  var taskListEl = event.target.closest(".task-list");
+  if (taskListEl) {
+    taskListEl.removeAttribute("style");
+}
+}
 // Create a new task
 formEl.addEventListener("submit", taskFormHandler);
 
@@ -230,3 +238,6 @@ pageContentEl.addEventListener("dragover", dropZoneDraghandler);
 
 // for dropping elements
 pageContentEl.addEventListener("drop", dropTaskHandler);
+
+// for leaving dragover
+pageContentEl.addEventListener("dragleave", dragLeaveHandler);
