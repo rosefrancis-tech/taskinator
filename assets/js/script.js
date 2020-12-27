@@ -283,6 +283,56 @@ var saveTasks = function() {
   localStorage.setItem("tasks", JSON.stringify(tasks));
 };
 
+var loadtasks = function() {
+  
+  tasks = localStorage.getItem("tasks", tasks);
+  console.log(tasks);
+  tasks = JSON.parse(tasks);
+  console.log(tasks);
+
+  for (i = 0; i < tasks.length; i++) {
+    var listItemEl = document.createElement("li");
+    listItemEl.className = "task-item";
+    listItemEl.setAttribute("data-task-id", tasks[i].id);
+    listItemEl.setAttribute("draggable", "true");
+    
+    var taskInfoEl = document.createElement("div");
+    taskInfoEl.className = "task-info";
+    taskInfoEl.innerHTML =
+      "<h3 class='task-name'>" + tasks[i].name + "</h3><span class='task-type'>" + tasks[i].type + "</span>";
+  
+  
+    listItemEl.appendChild(taskInfoEl);
+
+    var taskActionsEl = createTaskActions(tasks[i].id);
+    listItemEl.appendChild(taskActionsEl);
+    if (tasks[i].status === "to do") {
+      tasksToDoEl.appendChild(listItemEl);
+      listItemEl.querySelector("select[name='status-change']").selectedIndex = 0;
+    }
+    if (tasks[i].status === "in progress") {
+      listItemEl.querySelector("select[name='status-change']").selectedIndex = 1;
+      tasksInProgressEl.appendChild(listItemEl);
+    }
+    if (tasks[i].status === "completed") {
+      listItemEl.querySelector("select[name='status-change']").selectedIndex = 2;
+      tasksCompletedEl.appendChild(listItemEl);
+    }
+    taskIdCounter ++;
+}
+  
+/*
+  // update variable taskDataObj
+  taskDataObj.id = taskIdCounter;
+  tasks.push(taskDataObj);
+
+  // increase task counter for next unique id
+  taskIdCounter++;
+  saveTasks();
+*/
+};
+loadtasks();
+
 // Create a new task
 formEl.addEventListener("submit", taskFormHandler);
 
@@ -297,3 +347,4 @@ pageContentEl.addEventListener("dragstart", dragTaskHandler);
 pageContentEl.addEventListener("dragover", dropZoneDragHandler);
 pageContentEl.addEventListener("dragleave", dragLeaveHandler);
 pageContentEl.addEventListener("drop", dropTaskHandler);
+//pageContentEl.addEventListener("load", loadtasks);
